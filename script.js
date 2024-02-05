@@ -232,6 +232,7 @@ const fetchPromisePost = async (textValue, nameValue) => {
       body: JSON.stringify({
         text: sanitizeHtml(textValue),
         name: sanitizeHtml(nameValue),
+        forceError: true,
       }),
     }
   )
@@ -241,6 +242,8 @@ const fetchPromisePost = async (textValue, nameValue) => {
       } else if (response.status === 400) {
         console.log(response.status);
         throw new Error("Имя и комментарий должны быть не короче 3 символов");
+      } else if (response.status === 500) {
+        throw new Error("Сервер сломался");
       }
     })
     .then(() => {
@@ -252,6 +255,8 @@ const fetchPromisePost = async (textValue, nameValue) => {
         error.message === "Имя и комментарий должны быть не короче 3 символов"
       ) {
         alert("Имя и комментарий должны быть не короче 3 символов");
+      } else if (error.message === "Сервер сломался") {
+        alert("Сервер сломался, попробуй позже");
       } else {
         alert("Кажется, у вас сломался интернет, попробуйте позже");
       }
