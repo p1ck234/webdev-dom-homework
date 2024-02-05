@@ -36,10 +36,7 @@ function handleKeyPress(event) {
 
 function deleteLastComment() {
   const comments = listElement.getElementsByClassName("comment");
-
-  // Проверяем, есть ли комментарии для удаления
   if (comments.length > 0) {
-    // Удаляем последний комментарий
     const lastComment = comments[comments.length - 1];
     listElement.removeChild(lastComment);
   }
@@ -75,18 +72,23 @@ const initLikeButton = () => {
     likeButton.addEventListener("click", (event) => {
       event.stopPropagation();
       const index = likeButton.dataset.index;
-      if (comments[index].isLike === false) {
-        comments[index].isLike = true;
-        comments[index].likes++;
-        likeButton.classList.add("-active-like");
-      } else {
-        comments[index].isLike = false;
-        likeButton.classList.remove("-active-like");
-        comments[index].likes--;
-      }
-      const likesCounter =
-        likeButton.parentNode.querySelector(".likes-counter");
-      likesCounter.textContent = comments[index].likes;
+      likeButton.classList.add("-loading-like");
+
+      delay(2000).then(() => {
+        if (comments[index].isLike === false) {
+          likeButton.classList.add("-active-like");
+          comments[index].isLike = true;
+          comments[index].likes++;
+        } else {
+          likeButton.classList.remove("-active-like");
+          comments[index].isLike = false;
+          comments[index].likes--;
+        }
+        likeButton.classList.remove("-loading-like");
+        const likesCounter =
+          likeButton.parentNode.querySelector(".likes-counter");
+        likesCounter.textContent = comments[index].likes;
+      });
     });
   }
 };
@@ -176,6 +178,14 @@ const renderComments = () => {
   initReplyButton();
 };
 
+function delay(interval = 300) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, interval);
+  });
+}
+
 const buttonElement = document.getElementById("add-button");
 const likeButton = document.getElementById("like_button");
 const listElement = document.getElementById("list");
@@ -195,10 +205,12 @@ const fetchPromiseGet = () => {
     }
   );
 
-  fetchPromise.then((response) => {
-    const promiseJson = response.json();
-    promiseJson.then((response) => {
-      const appComments = response.comments.map((comment) => {
+  fetchPromise
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      const appComments = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
           date: formatDate(new Date(comment.date)),
@@ -210,7 +222,6 @@ const fetchPromiseGet = () => {
       comments = appComments;
       renderComments();
     });
-  });
 };
 const fetchPromisePost = async (textValue, nameValue) => {
   const fetchPromise = await fetch(
@@ -250,26 +261,9 @@ buttonElement.addEventListener("click", async () => {
     buttonElement.classList.add("error__button");
     commentInputElement.addEventListener("input", updateButtonState);
   } else {
-    // comments.push({
-    //   name: nameInputElement.value
-    //     .replaceAll("&", "&amp;")
-    //     .replaceAll("<", "&lt;")
-    //     .replaceAll(">", "&gt;")
-    //     .replaceAll('"', "&quot;"),
-    //   comment: commentInputElement.value
-    //     .replaceAll("&", "&amp;")
-    //     .replaceAll("<", "&lt;")
-    //     .replaceAll(">", "&gt;")
-    //     .replaceAll('"', "&quot;"),
-    //   likes: 0,
-    //   isLike: false,
-    //   date: today,
-    // });
-
     formElement.innerHTML = "<p>Комментарий добавляется...</p>";
 
     await fetchPromisePost(commentInputElement.value, nameInputElement.value);
-    //fetchPromisePost(commentInputElement.value, nameInputElement.value);
     fetchPromiseGet();
     formElement.innerHTML = `
     <input type="text" id="input-name" class="add-form-name" placeholder="Введите ваше имя" />
