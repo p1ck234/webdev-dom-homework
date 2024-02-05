@@ -243,7 +243,8 @@ const fetchPromisePost = async (textValue, nameValue) => {
         console.log(response.status);
         throw new Error("Имя и комментарий должны быть не короче 3 символов");
       } else if (response.status === 500) {
-        throw new Error("Сервер сломался");
+        fetchPromisePost(textValue, nameValue);
+        //throw new Error("Сервер сломался");
       }
     })
     .then(() => {
