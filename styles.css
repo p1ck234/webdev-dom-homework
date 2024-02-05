@@ -178,3 +178,6 @@ textarea {
 .remove-form-button {
   background-color: gray;
 }
+.hidden {
+  display: none;
+}
