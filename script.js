@@ -190,6 +190,7 @@ const buttonElement = document.getElementById("add-button");
 const likeButton = document.getElementById("like_button");
 const listElement = document.getElementById("list");
 const formElement = document.querySelector(".add-form");
+const formElementComment = document.querySelector("#add-form-loading");
 const nameInputElement = document.getElementById("input-name");
 const commentInputElement = document.getElementById("comment-input");
 const deleteLastButton = document.getElementById("delete-last-button");
@@ -199,7 +200,7 @@ let today = formatDate(date);
 let comments = [];
 const fetchPromiseGet = () => {
   const fetchPromise = fetch(
-    "https://wedev-api.sky.pro/api/v1/gleb-fokin/comments",
+    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
     {
       method: "get",
     }
@@ -225,15 +226,42 @@ const fetchPromiseGet = () => {
 };
 const fetchPromisePost = async (textValue, nameValue) => {
   const fetchPromise = await fetch(
-    "https://wedev-api.sky.pro/api/v1/gleb-fokin/comments",
+    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
     {
       method: "post",
       body: JSON.stringify({
         text: sanitizeHtml(textValue),
         name: sanitizeHtml(nameValue),
+        forceError: true,
       }),
     }
-  );
+  )
+    .then((response) => {
+      if (response.status === 200) {
+        return response;
+      } else if (response.status === 400) {
+        console.log(response.status);
+        throw new Error("Имя и комментарий должны быть не короче 3 символов");
+      } else if (response.status === 500) {
+        fetchPromisePost(textValue, nameValue);
+        //throw new Error("Сервер сломался");
+      }
+    })
+    .then(() => {
+      nameInputElement.value = "";
+      commentInputElement.value = "";
+    })
+    .catch((error) => {
+      if (
+        error.message === "Имя и комментарий должны быть не короче 3 символов"
+      ) {
+        alert("Имя и комментарий должны быть не короче 3 символов");
+      } else if (error.message === "Сервер сломался") {
+        alert("Сервер сломался, попробуй позже");
+      } else {
+        alert("Кажется, у вас сломался интернет, попробуйте позже");
+      }
+    });
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -261,19 +289,13 @@ buttonElement.addEventListener("click", async () => {
     buttonElement.classList.add("error__button");
     commentInputElement.addEventListener("input", updateButtonState);
   } else {
-    formElement.innerHTML = "<p>Комментарий добавляется...</p>";
+    formElement.classList.add("hidden");
+    formElementComment.classList.remove("hidden");
 
     await fetchPromisePost(commentInputElement.value, nameInputElement.value);
     fetchPromiseGet();
-    formElement.innerHTML = `
-    <input type="text" id="input-name" class="add-form-name" placeholder="Введите ваше имя" />
-    <textarea type="textarea" id="comment-input" class="add-form-text" placeholder="Введите ваш комментарий" rows="4"></textarea>
-    <div class="add-form-row">
-      <button id="add-button" class="add-form-button">Написать</button>
-    </div>
-  `;
-    nameInputElement.value = "";
-    commentInputElement.value = "";
+    formElement.classList.remove("hidden");
+    formElementComment.classList.add("hidden");
   }
 });
 console.log("It works!");
