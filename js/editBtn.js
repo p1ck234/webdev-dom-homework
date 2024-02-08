@@ -1,4 +1,4 @@
-export const handleEditClick = (index) => {
+const handleEditClick = (index) => {
   const listElement = document.getElementById("list");
 
   const editButtonElements = document.querySelectorAll(".edit-button");

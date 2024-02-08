@@ -1,7 +1,7 @@
 import { fetchPromisePost } from "./api.js";
 import { renderComments } from "./renderComments.js";
 
-export const handleSaveClick = (index, comments) => {
+const handleSaveClick = (index, comments) => {
   const listElement = document.getElementById("list");
 
   const textareaElement = listElement.querySelector(".comment textarea");

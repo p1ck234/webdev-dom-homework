@@ -1,6 +1,6 @@
 import { initLikeButton } from "./LikeBtn.js";
-import { handleSaveClick, initSaveButton } from "./saveBtn.js";
-import { handleEditClick, initEditButton } from "./editBtn.js";
+import { initSaveButton } from "./saveBtn.js";
+import { initEditButton } from "./editBtn.js";
 import { initReplyButton } from "./replyBtn.js";
 
 
