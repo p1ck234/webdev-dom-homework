@@ -1,9 +1,16 @@
 import { fetchPromisePost, fetchPromiseGet } from "./api.js";
-
+const buttonElement = document.getElementById("add-button");
+const nameInputElement = document.getElementById("input-name");
+const commentInputElement = document.getElementById("comment-input");
+function updateButtonState() {
+  buttonElement.classList.remove("error__button");
+  buttonElement.disabled =
+    nameInputElement.value.trim() === "" ||
+    commentInputElement.value.trim() === "";
+  nameInputElement.classList.remove("error");
+  commentInputElement.classList.remove("error");
+}
 export function addBtn() {
-  const buttonElement = document.getElementById("add-button");
-  const nameInputElement = document.getElementById("input-name");
-  const commentInputElement = document.getElementById("comment-input");
   const formElement = document.querySelector(".add-form");
   const formElementComment = document.querySelector("#add-form-loading");
   buttonElement.addEventListener("click", async () => {

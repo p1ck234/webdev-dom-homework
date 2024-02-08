@@ -25,18 +25,19 @@ export const fetchPromisePost = async (textValue, nameValue) => {
         return response;
       } else if (response.status === 400) {
         console.log(response.status);
-        throw new Error("Имя и комментарий должны быть не короче 3 символов");
+        throw new Error("ошибка 400");
       } else if (response.status === 500) {
-        fetchPromisePost(textValue, nameValue);
+        throw new Error("ошибка 500");
       }
     })
     .catch((error) => {
-      if (
-        error.message === "Имя и комментарий должны быть не короче 3 символов"
-      ) {
+      if (error.message === "ошибка 400") {
         alert("Имя и комментарий должны быть не короче 3 символов");
       } else if (error.message === "Сервер сломался") {
         alert("Сервер сломался, попробуй позже");
+      } else if (error.message === "ошибка 500") {
+        alert("Что-то пошло не так, мы пытаемся переотправить ваш запрос");
+        fetchPromisePost(textValue, nameValue);
       } else {
         alert("Кажется, у вас сломался интернет, попробуйте позже");
       }

@@ -6,3 +6,4 @@ export function deleteLastComment() {
     return listElement.removeChild(lastComment);
   }
 }
+
