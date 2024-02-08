@@ -1,3 +1,6 @@
+import { formatDate } from "./formatDate.js";
+import { renderComments } from "./renderComments.js";
+
 const sanitizeHtml = (htmlString) => {
   return htmlString
     .replaceAll("&", "&amp;")
@@ -41,5 +44,31 @@ export const fetchPromisePost = async (textValue, nameValue) => {
       } else {
         alert("Кажется, у вас сломался интернет, попробуйте позже");
       }
+    });
+};
+export const fetchPromiseGet = (comments) => {
+  const fetchPromise = fetch(
+    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
+    {
+      method: "get",
+    }
+  );
+
+  fetchPromise
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      const appComments = responseData.comments.map((comment) => {
+        return {
+          name: comment.author.name,
+          date: formatDate(new Date(comment.date)),
+          comment: comment.text,
+          likes: comment.likes,
+          isLike: false,
+        };
+      });
+      comments = appComments;
+      renderComments(comments);
     });
 };

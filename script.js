@@ -1,7 +1,7 @@
 ("use strict");
 import { formatDate } from "./js/formatDate.js";
 import { deleteLastComment } from "./js/deleteLastComment.js";
-import { fetchPromisePost } from "./js/api.js";
+import { fetchPromisePost, fetchPromiseGet } from "./js/api.js";
 import { renderComments } from "./js/renderComments.js";
 import {} from "./js/addBtn.js";
 
@@ -30,32 +30,7 @@ const commentInputElement = document.getElementById("comment-input");
 const deleteLastButton = document.getElementById("delete-last-button");
 
 let comments = [];
-const fetchPromiseGet = () => {
-  const fetchPromise = fetch(
-    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
-    {
-      method: "get",
-    }
-  );
-
-  fetchPromise
-    .then((response) => {
-      return response.json();
-    })
-    .then((responseData) => {
-      const appComments = responseData.comments.map((comment) => {
-        return {
-          name: comment.author.name,
-          date: formatDate(new Date(comment.date)),
-          comment: comment.text,
-          likes: comment.likes,
-          isLike: false,
-        };
-      });
-      comments = appComments;
-      renderComments(comments);
-    });
-};
+fetchPromiseGet(comments);
 
 document.addEventListener("DOMContentLoaded", async () => {
   listElement.innerHTML = "<p>Загрузка данных...</p>";
