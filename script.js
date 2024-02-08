@@ -1,31 +1,9 @@
-"use strict";
-function formatDate(date) {
-  const day = ("0" + date.getDate()).slice(-2);
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const year = date.getFullYear().toString().slice(-2);
-  const hours = ("0" + date.getHours()).slice(-2);
-  const minutes = ("0" + date.getMinutes()).slice(-2);
-
-  const formattedDate =
-    day + "." + month + "." + year + " " + hours + ":" + minutes;
-
-  return formattedDate;
-}
-
-const sanitizeHtml = (htmlString) => {
-  return htmlString
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-};
-
-function updateButtonState() {
-  buttonElement.classList.remove("error__button");
-  addButton.disabled =
-    nameInputElement.value.trim() === "" ||
-    commentInputElement.value.trim() === "";
-}
+("use strict");
+import { formatDate } from "./js/formatDate.js";
+import { sanitizeHtml } from "./js/sanitizeHtml.js";
+import { deleteLastComment } from "./js/deleteLastComment.js";
+import { handleEditClick, initReplyButton } from "./js/editBtn.js";
+import {} from "./js/addBtn.js";
 
 function handleKeyPress(event) {
   if (event.key === "Enter") {
@@ -33,29 +11,12 @@ function handleKeyPress(event) {
     buttonElement.click();
   }
 }
-
-function deleteLastComment() {
-  const comments = listElement.getElementsByClassName("comment");
-  if (comments.length > 0) {
-    const lastComment = comments[comments.length - 1];
-    listElement.removeChild(lastComment);
-  }
+function updateButtonState() {
+  buttonElement.classList.remove("error__button");
+  addButton.disabled =
+    nameInputElement.value.trim() === "" ||
+    commentInputElement.value.trim() === "";
 }
-
-const handleEditClick = (index) => {
-  const editButtonElements = document.querySelectorAll(".edit-button");
-  const saveButtonElements = document.querySelectorAll(".save-button");
-  editButtonElements[index].style.display = "none";
-  saveButtonElements[index].style.display = "inline-block";
-
-  const commentTextElement =
-    listElement.getElementsByClassName("comment-text")[index];
-  const currentText = commentTextElement.textContent.trim();
-  const textareaElement = document.createElement("textarea");
-  textareaElement.value = currentText;
-  commentTextElement.innerHTML = "";
-  commentTextElement.appendChild(textareaElement);
-};
 
 const handleSaveClick = (index) => {
   const textareaElement = listElement.querySelector(".comment textarea");
@@ -89,18 +50,6 @@ const initLikeButton = () => {
           likeButton.parentNode.querySelector(".likes-counter");
         likesCounter.textContent = comments[index].likes;
       });
-    });
-  }
-};
-
-const initReplyButton = () => {
-  const commentsElements = document.querySelectorAll(".comment");
-  for (const commentElement of commentsElements) {
-    commentElement.addEventListener("click", (event) => {
-      const indexComment = commentElement.dataset.index;
-      const curruntComment = comments[indexComment].comment;
-      const curruntName = comments[indexComment].name;
-      commentInputElement.value = `${curruntComment}\n${curruntName} - `;
     });
   }
 };
@@ -194,8 +143,6 @@ const formElementComment = document.querySelector("#add-form-loading");
 const nameInputElement = document.getElementById("input-name");
 const commentInputElement = document.getElementById("comment-input");
 const deleteLastButton = document.getElementById("delete-last-button");
-let date = new Date();
-let today = formatDate(date);
 
 let comments = [];
 const fetchPromiseGet = () => {
@@ -244,7 +191,6 @@ const fetchPromisePost = async (textValue, nameValue) => {
         throw new Error("Имя и комментарий должны быть не короче 3 символов");
       } else if (response.status === 500) {
         fetchPromisePost(textValue, nameValue);
-        //throw new Error("Сервер сломался");
       }
     })
     .then(() => {
