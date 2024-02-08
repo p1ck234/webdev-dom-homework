@@ -2,7 +2,7 @@
 import { formatDate } from "./js/formatDate.js";
 import { sanitizeHtml } from "./js/sanitizeHtml.js";
 import { deleteLastComment } from "./js/deleteLastComment.js";
-import { handleEditClick, initReplyButton } from "./js/editBtn.js";
+import { handleEditClick, initEditButton } from "./js/editBtn.js";
 import {} from "./js/addBtn.js";
 
 function handleKeyPress(event) {
@@ -54,16 +54,17 @@ const initLikeButton = () => {
   }
 };
 
-const initEditButton = () => {
-  const editButtonElements = document.querySelectorAll(".edit-button");
-  editButtonElements.forEach((editButton, index) => {
-    editButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      handleEditClick(index);
+ const initReplyButton = () => {
+  const commentsElements = document.querySelectorAll(".comment");
+  for (const commentElement of commentsElements) {
+    commentElement.addEventListener("click", (event) => {
+      const indexComment = commentElement.dataset.index;
+      const curruntComment = comments[indexComment].comment;
+      const curruntName = comments[indexComment].name;
+      commentInputElement.value = `${curruntComment}\n${curruntName} - `;
     });
-  });
+  }
 };
-
 const initSaveButton = () => {
   const saveButtonElements = document.querySelectorAll(".save-button");
   saveButtonElements.forEach((saveButton, index) => {
