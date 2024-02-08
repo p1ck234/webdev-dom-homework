@@ -1,9 +1,8 @@
 ("use strict");
 import { formatDate } from "./js/formatDate.js";
-import { sanitizeHtml } from "./js/sanitizeHtml.js";
 import { deleteLastComment } from "./js/deleteLastComment.js";
-import { handleEditClick, initEditButton } from "./js/editBtn.js";
-import { initReplyButton } from "./js/replyBtn.js";
+import { fetchPromisePost } from "./js/api.js";
+import { renderComments } from "./js/renderComments.js";
 import {} from "./js/addBtn.js";
 
 function handleKeyPress(event) {
@@ -17,115 +16,8 @@ function updateButtonState() {
   buttonElement.disabled =
     nameInputElement.value.trim() === "" ||
     commentInputElement.value.trim() === "";
-    nameInputElement.classList.remove("error");
-    commentInputElement.classList.remove("error");
-}
-
-const handleSaveClick = (index) => {
-  const textareaElement = listElement.querySelector(".comment textarea");
-  const editedText = textareaElement.value;
-
-  comments[index].comment = editedText;
-  fetchPromisePost(comments[index].comment, comments[index].name);
-  renderComments();
-};
-
-const initLikeButton = () => {
-  const likeButtonsElements = document.querySelectorAll(".like-button");
-  for (const likeButton of likeButtonsElements) {
-    likeButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const index = likeButton.dataset.index;
-      likeButton.classList.add("-loading-like");
-
-      delay(2000).then(() => {
-        if (comments[index].isLike === false) {
-          likeButton.classList.add("-active-like");
-          comments[index].isLike = true;
-          comments[index].likes++;
-        } else {
-          likeButton.classList.remove("-active-like");
-          comments[index].isLike = false;
-          comments[index].likes--;
-        }
-        likeButton.classList.remove("-loading-like");
-        const likesCounter =
-          likeButton.parentNode.querySelector(".likes-counter");
-        likesCounter.textContent = comments[index].likes;
-      });
-    });
-  }
-};
-
-const initSaveButton = () => {
-  const saveButtonElements = document.querySelectorAll(".save-button");
-  saveButtonElements.forEach((saveButton, index) => {
-    saveButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      handleSaveClick(index);
-    });
-  });
-};
-
-const renderComments = () => {
-  const commnetsHTML = comments
-    .map((comment, index) => {
-      if (comment.isLike === false) {
-        return `<li class="comment" data-index="${index}">
-            <div class="comment-header">
-              <div>${comment.name}</div>
-              <div>${comment.date}</div>
-            </div>
-            <div class="comment-body">
-              <div class="comment-text"">
-                ${comment.comment}
-              </div>
-            </div>
-            <div class="comment-footer">
-              <div class="likes">
-                <span class="likes-counter">${comment.likes}</span>
-                <button id="like_button" data-index="${index}" class="like-button"></button>
-              </div>
-            </div>
-            <button id="edit_button" data-index="${index}" class="add-form-button edit-button">Редактировать</button>
-            <button id="save_button" data-index="${index}" class="add-form-button save-button">Сохранить</button>
-          </li>`;
-      } else {
-        return `<li class="comment" data-index="${index}">
-            <div class="comment-header">
-              <div>${comment.name}</div>
-              <div>${comment.date}</div>
-            </div>
-            <div class="comment-body">
-              <div class="comment-text"">
-                ${comment.comment}
-              </div>
-            </div>
-            <div class="comment-footer">
-              <div class="likes">
-                <span class="likes-counter">${comment.likes}</span>
-                <button id="like_button" data-index="${index}" class="like-button -active-like"></button>
-              </div>
-            </div>
-            <button id="edit_button" data-index="${index}" class="add-form-button edit-button">Редактировать</button>
-            <button id="save_button" data-index="${index}" class="add-form-button save-button">Сохранить</button>
-            </li>`;
-      }
-    })
-    .join("");
-  listElement.innerHTML = commnetsHTML;
-  initLikeButton();
-  initSaveButton();
-  initEditButton();
-  initReplyButton(comments);
-};
-
-function delay(interval = 300) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, interval);
-  });
+  nameInputElement.classList.remove("error");
+  commentInputElement.classList.remove("error");
 }
 
 const buttonElement = document.getElementById("add-button");
@@ -161,45 +53,7 @@ const fetchPromiseGet = () => {
         };
       });
       comments = appComments;
-      renderComments();
-    });
-};
-const fetchPromisePost = async (textValue, nameValue) => {
-  const fetchPromise = await fetch(
-    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
-    {
-      method: "post",
-      body: JSON.stringify({
-        text: sanitizeHtml(textValue),
-        name: sanitizeHtml(nameValue),
-        forceError: true,
-      }),
-    }
-  )
-    .then((response) => {
-      if (response.status === 200) {
-        return response;
-      } else if (response.status === 400) {
-        console.log(response.status);
-        throw new Error("Имя и комментарий должны быть не короче 3 символов");
-      } else if (response.status === 500) {
-        fetchPromisePost(textValue, nameValue);
-      }
-    })
-    .then(() => {
-      nameInputElement.value = "";
-      commentInputElement.value = "";
-    })
-    .catch((error) => {
-      if (
-        error.message === "Имя и комментарий должны быть не короче 3 символов"
-      ) {
-        alert("Имя и комментарий должны быть не короче 3 символов");
-      } else if (error.message === "Сервер сломался") {
-        alert("Сервер сломался, попробуй позже");
-      } else {
-        alert("Кажется, у вас сломался интернет, попробуйте позже");
-      }
+      renderComments(comments);
     });
 };
 
