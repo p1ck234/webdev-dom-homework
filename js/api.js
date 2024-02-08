@@ -30,10 +30,6 @@ export const fetchPromisePost = async (textValue, nameValue) => {
         fetchPromisePost(textValue, nameValue);
       }
     })
-    .then(() => {
-      nameInputElement.value = "";
-      commentInputElement.value = "";
-    })
     .catch((error) => {
       if (
         error.message === "Имя и комментарий должны быть не короче 3 символов"

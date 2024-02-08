@@ -1,9 +1,8 @@
 ("use strict");
-import { formatDate } from "./js/formatDate.js";
 import { deleteLastComment } from "./js/deleteLastComment.js";
 import { fetchPromisePost, fetchPromiseGet } from "./js/api.js";
 import { renderComments } from "./js/renderComments.js";
-import {} from "./js/addBtn.js";
+import { addBtn } from "./js/addBtn.js";
 
 function handleKeyPress(event) {
   if (event.key === "Enter") {
@@ -31,6 +30,7 @@ const deleteLastButton = document.getElementById("delete-last-button");
 
 let comments = [];
 fetchPromiseGet(comments);
+renderComments(comments);
 
 document.addEventListener("DOMContentLoaded", async () => {
   listElement.innerHTML = "<p>Загрузка данных...</p>";
@@ -42,28 +42,5 @@ commentInputElement.addEventListener("keypress", handleKeyPress);
 buttonElement.addEventListener("keypress", handleKeyPress);
 deleteLastButton.addEventListener("click", deleteLastComment);
 
-buttonElement.addEventListener("click", async () => {
-  nameInputElement.classList.remove("error");
-  commentInputElement.classList.remove("error");
-  buttonElement.classList.remove("error__button");
-
-  if (nameInputElement.value === "") {
-    nameInputElement.classList.add("error");
-    buttonElement.classList.add("error__button");
-    nameInputElement.addEventListener("input", updateButtonState);
-    return;
-  } else if (commentInputElement.value === "") {
-    commentInputElement.classList.add("error");
-    buttonElement.classList.add("error__button");
-    commentInputElement.addEventListener("input", updateButtonState);
-  } else {
-    formElement.classList.add("hidden");
-    formElementComment.classList.remove("hidden");
-
-    await fetchPromisePost(commentInputElement.value, nameInputElement.value);
-    fetchPromiseGet();
-    formElement.classList.remove("hidden");
-    formElementComment.classList.add("hidden");
-  }
-});
+addBtn();
 console.log("It works!");
