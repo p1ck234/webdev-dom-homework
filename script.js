@@ -3,6 +3,7 @@ import { formatDate } from "./js/formatDate.js";
 import { sanitizeHtml } from "./js/sanitizeHtml.js";
 import { deleteLastComment } from "./js/deleteLastComment.js";
 import { handleEditClick, initEditButton } from "./js/editBtn.js";
+import { initReplyButton } from "./js/replyBtn.js";
 import {} from "./js/addBtn.js";
 
 function handleKeyPress(event) {
@@ -13,9 +14,11 @@ function handleKeyPress(event) {
 }
 function updateButtonState() {
   buttonElement.classList.remove("error__button");
-  addButton.disabled =
+  buttonElement.disabled =
     nameInputElement.value.trim() === "" ||
     commentInputElement.value.trim() === "";
+    nameInputElement.classList.remove("error");
+    commentInputElement.classList.remove("error");
 }
 
 const handleSaveClick = (index) => {
@@ -54,17 +57,6 @@ const initLikeButton = () => {
   }
 };
 
- const initReplyButton = () => {
-  const commentsElements = document.querySelectorAll(".comment");
-  for (const commentElement of commentsElements) {
-    commentElement.addEventListener("click", (event) => {
-      const indexComment = commentElement.dataset.index;
-      const curruntComment = comments[indexComment].comment;
-      const curruntName = comments[indexComment].name;
-      commentInputElement.value = `${curruntComment}\n${curruntName} - `;
-    });
-  }
-};
 const initSaveButton = () => {
   const saveButtonElements = document.querySelectorAll(".save-button");
   saveButtonElements.forEach((saveButton, index) => {
@@ -125,7 +117,7 @@ const renderComments = () => {
   initLikeButton();
   initSaveButton();
   initEditButton();
-  initReplyButton();
+  initReplyButton(comments);
 };
 
 function delay(interval = 300) {
