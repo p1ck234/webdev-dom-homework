@@ -8,7 +8,6 @@ const handleSaveClick = (index, comments) => {
   const editedText = textareaElement.value;
 
   comments[index].comment = editedText;
-  fetchPromisePost(comments[index].comment, comments[index].name);
   renderComments(comments);
 };
 

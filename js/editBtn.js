@@ -10,6 +10,9 @@ const handleEditClick = (index) => {
     listElement.getElementsByClassName("comment-text")[index];
   const currentText = commentTextElement.textContent.trim();
   const textareaElement = document.createElement("textarea");
+  textareaElement.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
   textareaElement.value = currentText;
   commentTextElement.innerHTML = "";
   commentTextElement.appendChild(textareaElement);
