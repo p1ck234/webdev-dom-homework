@@ -146,10 +146,6 @@ export const fetchPromiseReg = (name, login, password) => {
     })
     .then((responseData) => {
       alert("Вы успешно зарегистрировались.");
-      appElement.classList.add("hidden");
-
-      setToken(responseData.user.token);
-      fetchPromiseAuth(regLoginElement.value, regPassElement.value);
       regLoginElement.value = "";
       regNameElement.value = "";
       regPassElement.value = "";

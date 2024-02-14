@@ -1,6 +1,6 @@
-import { setToken, fetchPromiseGet, fetchPromiseAuth } from "./api.js";
+import { fetchPromiseAuth } from "./api.js";
 import { renderReg } from "./regpage.js";
-export const renderLogin = (comments) => {
+export const renderLogin = () => {
   const appElement = document.getElementById("app");
   const authHtml = ` <div id="add-form-auth" class="auth__form">
     <p class="auth__title">Форма входа</p>
@@ -23,7 +23,6 @@ export const renderLogin = (comments) => {
 
   // со страницы регистрации
   const regLinkElement = document.querySelector("#reg-link");
-  const regFormElement = document.querySelector("#add-form-reg");
 
   // со страницы авторизации
   const authBtnElement = document.querySelector("#auth-btn");
@@ -31,18 +30,10 @@ export const renderLogin = (comments) => {
   const authPassElement = document.getElementById("auth-password");
   const formAuthElement = document.querySelector("#add-form-auth");
 
-  //   linkAuthElement.addEventListener("click", () => {
-  //     commentsElement.classList.toggle("hidden");
-  //     linkAuthTextElement.classList.toggle("hidden");
-  //     formAuthElement.classList.remove("hidden");
-  //     formAuthElement.classList.add("auth__form");
-  //   });
   regLinkElement.addEventListener("click", () => {
     formAuthElement.classList.add("hidden");
     formAuthElement.classList.remove("auth__form");
     renderReg();
-    // regFormElement.classList.remove("hidden");
-    // regFormElement.classList.add("auth__form");
   });
   authBtnElement.addEventListener("click", () => {
     fetchPromiseAuth(authLoginElement.value, authPassElement.value);

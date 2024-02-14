@@ -1,6 +1,6 @@
 ("use strict");
 import { deleteLastComment } from "./js/deleteLastComment.js";
-import { fetchPromiseGet, setToken } from "./js/api.js";
+import { fetchPromiseGet } from "./js/api.js";
 import { renderComments } from "./js/renderComments.js";
 import { addBtn } from "./js/addBtn.js";
 import { renderLogin } from "./js/authpage.js";
@@ -26,7 +26,7 @@ let comments = [];
 linkAuthElement.addEventListener("click", () => {
   listElement.classList.add('hidden');
   linkAuthTextElement.classList.add("hidden");
-  renderLogin(comments);
+  renderLogin();
 });
 
 fetchPromiseGet(comments);
