@@ -3,6 +3,7 @@ import { deleteLastComment } from "./js/deleteLastComment.js";
 import { fetchPromiseGet, setToken } from "./js/api.js";
 import { renderComments } from "./js/renderComments.js";
 import { addBtn } from "./js/addBtn.js";
+import { renderLogin } from "./js/authpage.js";
 
 function handleKeyPress(event) {
   if (event.key === "Enter") {
@@ -28,26 +29,24 @@ const regBtnElement = document.querySelector("#reg-btn");
 const regLoginElement = document.querySelector("#reg-login");
 const regNameElement = document.querySelector("#reg-name");
 const regPassElement = document.querySelector("#reg-password");
-const authBtnElement = document.querySelector("#auth-btn");
-const authLoginElement = document.getElementById("auth-login");
-const authPassElement = document.getElementById("auth-password");
+
 
 const formAddElement = document.querySelector("#add-form");
 
 let comments = [];
 
 linkAuthElement.addEventListener("click", () => {
-  commentsElement.classList.toggle("hidden");
-  linkAuthTextElement.classList.toggle("hidden");
-  formAuthElement.classList.remove("hidden");
-  formAuthElement.classList.add("auth__form");
+  // commentsElement.classList.toggle("hidden");
+  // linkAuthTextElement.classList.toggle("hidden");
+  // formAuthElement.classList.remove("hidden");
+  // formAuthElement.classList.add("auth__form");
 
-  regLinkElement.addEventListener("click", () => {
-    formAuthElement.classList.add("hidden");
-    formAuthElement.classList.remove("auth__form");
-    regFormElement.classList.remove("hidden");
-    regFormElement.classList.add("auth__form");
-  });
+  // regLinkElement.addEventListener("click", () => {
+  //   formAuthElement.classList.add("hidden");
+  //   formAuthElement.classList.remove("auth__form");
+  //   regFormElement.classList.remove("hidden");
+  //   regFormElement.classList.add("auth__form");
+  // });
   authFormElement.addEventListener("click", () => {
     regFormElement.classList.add("hidden");
     regFormElement.classList.remove("auth__form");
@@ -86,30 +85,9 @@ regBtnElement.addEventListener("click", () => {
       }
     });
 });
+renderLogin(comments);
 
-authBtnElement.addEventListener("click", () => {
-  const fetchPromise = fetch("https://wedev-api.sky.pro/api/user/login", {
-    method: "post",
-    body: JSON.stringify({
-      login: authLoginElement.value,
-      password: authPassElement.value,
-    }),
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((responseData) => {
-      setToken(responseData.user.token);
-      fetchPromiseGet(comments);
-      commentsElement.classList.toggle("hidden");
-      formAuthElement.classList.remove("auth__form");
-      formAuthElement.classList.add("hidden");
-      formAddElement.classList.add("add-form");
-      formAddElement.classList.remove("hidden");
-      nameInputElement.value = responseData.user.name;
-      nameInputElement.disabled = true;
-    });
-});
+
 
 fetchPromiseGet(comments);
 renderComments(comments);
