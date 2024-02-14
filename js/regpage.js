@@ -1,4 +1,5 @@
 import { renderLogin } from "./authpage.js";
+import { setToken, fetchPromiseGet } from "./api.js";
 
 export const renderReg = () => {
   const appElement = document.getElementById("app");
@@ -70,6 +71,7 @@ export const renderReg = () => {
         regLoginElement.value = "";
         regNameElement.value = "";
         regPassElement.value = "";
+        
       })
       .catch((error) => {
         if (error.message === "ошибка 400") {

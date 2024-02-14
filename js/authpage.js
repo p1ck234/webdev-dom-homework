@@ -1,4 +1,4 @@
-import { setToken, fetchPromiseGet } from "./api.js";
+import { setToken, fetchPromiseGet, fetchPromiseAuth } from "./api.js";
 import { renderReg } from "./regpage.js";
 export const renderLogin = (comments) => {
   const appElement = document.getElementById("app");
@@ -30,11 +30,6 @@ export const renderLogin = (comments) => {
   const authLoginElement = document.getElementById("auth-login");
   const authPassElement = document.getElementById("auth-password");
   const formAuthElement = document.querySelector("#add-form-auth");
-  const linkAuthElement = document.querySelector(".link-auth");
-  const commentsElement = document.querySelector(".comments");
-  const linkAuthTextElement = document.querySelector(".link-text");
-  const formAddElement = document.querySelector("#add-form");
-  const nameInputElement = document.getElementById("input-name");
 
   //   linkAuthElement.addEventListener("click", () => {
   //     commentsElement.classList.toggle("hidden");
@@ -50,41 +45,6 @@ export const renderLogin = (comments) => {
     // regFormElement.classList.add("auth__form");
   });
   authBtnElement.addEventListener("click", () => {
-    const fetchPromise = fetch("https://wedev-api.sky.pro/api/user/login", {
-      method: "post",
-      body: JSON.stringify({
-        login: authLoginElement.value,
-        password: authPassElement.value,
-      }),
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          return response;
-        } else if (response.status === 400) {
-          throw new Error("ошибка 400");
-        }
-      })
-      .then((response) => {
-        return response.json();
-      })
-
-      .then((responseData) => {
-        setToken(responseData.user.token);
-        fetchPromiseGet(comments);
-        commentsElement.classList.toggle("hidden");
-        formAuthElement.classList.remove("auth__form");
-        formAuthElement.classList.add("hidden");
-        formAddElement.classList.add("add-form");
-        formAddElement.classList.remove("hidden");
-        nameInputElement.value = responseData.user.name;
-        nameInputElement.disabled = true;
-      })
-      .catch((error) => {
-        if (error.message === "ошибка 400") {
-          alert("Неправильный логин или пароль");
-        } else {
-          alert("Кажется, у вас сломался интернет, попробуйте позже");
-        }
-      });
+    fetchPromiseAuth(authLoginElement.value, authPassElement.value);
   });
 };
