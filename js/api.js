@@ -12,7 +12,7 @@ let token;
 export const setToken = (newToken) => {
   token = newToken;
 };
-export const fetchPromisePost = async (textValue, nameValue) => {
+export const fetchPromisePost = async (textValue) => {
   const fetchPromise = await fetch(
     "https://wedev-api.sky.pro/api/v2/danil-vetrov/comments",
     {
@@ -20,8 +20,8 @@ export const fetchPromisePost = async (textValue, nameValue) => {
       body: JSON.stringify({
         text: sanitizeHtml(textValue),
 
-        Headers: {
-          Authorization: token,
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       }),
     }
@@ -43,7 +43,7 @@ export const fetchPromisePost = async (textValue, nameValue) => {
         alert("Сервер сломался, попробуй позже");
       } else if (error.message === "ошибка 500") {
         alert("Что-то пошло не так, мы пытаемся переотправить ваш запрос");
-        fetchPromisePost(textValue, nameValue);
+        fetchPromisePost(textValue);
       } else {
         alert("Кажется, у вас сломался интернет, попробуйте позже");
       }
@@ -54,8 +54,8 @@ export const fetchPromiseGet = (comments) => {
     "https://wedev-api.sky.pro/api/v2/danil-vetrov/comments",
     {
       method: "get",
-      Headers: {
-        Authorization: token,
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     }
   );
