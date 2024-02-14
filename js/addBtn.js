@@ -31,11 +31,7 @@ export function addBtn() {
       formElement.classList.add("hidden");
       formElementComment.classList.remove("hidden");
 
-      await fetchPromisePost(
-        commentInputElement.value,
-        nameInputElement.value
-      ).then(() => {
-        nameInputElement.value = "";
+      await fetchPromisePost(commentInputElement.value).then(() => {
         commentInputElement.value = "";
       });
       fetchPromiseGet();

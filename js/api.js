@@ -17,12 +17,11 @@ export const fetchPromisePost = async (textValue) => {
     "https://wedev-api.sky.pro/api/v2/danil-vetrov/comments",
     {
       method: "post",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         text: sanitizeHtml(textValue),
-
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }),
     }
   )
