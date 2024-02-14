@@ -1,6 +1,6 @@
 ("use strict");
 import { deleteLastComment } from "./js/deleteLastComment.js";
-import { fetchPromiseGet } from "./js/api.js";
+import { fetchPromiseGet, setToken } from "./js/api.js";
 import { renderComments } from "./js/renderComments.js";
 import { addBtn } from "./js/addBtn.js";
 
@@ -32,10 +32,8 @@ const authBtnElement = document.querySelector("#auth-btn");
 const authLoginElement = document.getElementById("auth-login");
 const authPassElement = document.getElementById("auth-password");
 
-let token;
-const setToken = (newToken) => {
-  token = newToken;
-};
+const formAddElement = document.querySelector("#add-form");
+
 let comments = [];
 
 linkAuthElement.addEventListener("click", () => {
@@ -96,12 +94,21 @@ authBtnElement.addEventListener("click", () => {
       login: authLoginElement.value,
       password: authPassElement.value,
     }),
-  }).then((response) => {
-    return response.json();
-  }).then((responseData) => {
-    setToken(responseData.user.token);
-    console.log(token);
-  });
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      setToken(responseData.user.token);
+      fetchPromiseGet(comments);
+      commentsElement.classList.toggle("hidden");
+      formAuthElement.classList.remove("auth__form");
+      formAuthElement.classList.add("hidden");
+      formAddElement.classList.add("add-form");
+      formAddElement.classList.remove("hidden");
+      nameInputElement.value = responseData.user.name;
+      nameInputElement.disabled = true;
+    });
 });
 
 fetchPromiseGet(comments);

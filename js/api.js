@@ -8,15 +8,21 @@ const sanitizeHtml = (htmlString) => {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 };
+let token;
+export const setToken = (newToken) => {
+  token = newToken;
+};
 export const fetchPromisePost = async (textValue, nameValue) => {
   const fetchPromise = await fetch(
-    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
+    "https://wedev-api.sky.pro/api/v2/danil-vetrov/comments",
     {
       method: "post",
       body: JSON.stringify({
         text: sanitizeHtml(textValue),
-        name: sanitizeHtml(nameValue),
-        forceError: true,
+
+        Headers: {
+          Authorization: token,
+        },
       }),
     }
   )
@@ -45,9 +51,12 @@ export const fetchPromisePost = async (textValue, nameValue) => {
 };
 export const fetchPromiseGet = (comments) => {
   const fetchPromise = fetch(
-    "https://wedev-api.sky.pro/api/v1/danil-vetrov/comments",
+    "https://wedev-api.sky.pro/api/v2/danil-vetrov/comments",
     {
       method: "get",
+      Headers: {
+        Authorization: token,
+      },
     }
   );
 
