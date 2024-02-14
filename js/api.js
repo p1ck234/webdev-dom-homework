@@ -120,3 +120,45 @@ export const fetchPromiseAuth = (valueLogin, valuePassword) => {
       }
     });
 };
+
+export const fetchPromiseReg = (name, login, password) => {
+  const appElement = document.getElementById("app");
+  const regLoginElement = document.querySelector("#reg-login");
+  const regNameElement = document.querySelector("#reg-name");
+  const regPassElement = document.querySelector("#reg-password");
+  const fetchPromise = fetch("https://wedev-api.sky.pro/api/user", {
+    method: "post",
+    body: JSON.stringify({
+      login: login,
+      name: name,
+      password: password,
+    }),
+  })
+    .then((response) => {
+      if (response.status === 201) {
+        return response;
+      } else if (response.status === 400) {
+        throw new Error("ошибка 400");
+      }
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((responseData) => {
+      alert("Вы успешно зарегистрировались.");
+      appElement.classList.add("hidden");
+
+      setToken(responseData.user.token);
+      fetchPromiseAuth(regLoginElement.value, regPassElement.value);
+      regLoginElement.value = "";
+      regNameElement.value = "";
+      regPassElement.value = "";
+    })
+    .catch((error) => {
+      if (error.message === "ошибка 400") {
+        alert("Пользователь с такими данными уже есть, попробуйте снова");
+      } else {
+        alert("Кажется, у вас сломался интернет, попробуйте позже");
+      }
+    });
+};
