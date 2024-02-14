@@ -58,8 +58,16 @@ export const renderLogin = (comments) => {
       }),
     })
       .then((response) => {
+        if (response.status === 201) {
+          return response;
+        } else if (response.status === 400) {
+          throw new Error("ошибка 400");
+        }
+      })
+      .then((response) => {
         return response.json();
       })
+
       .then((responseData) => {
         setToken(responseData.user.token);
         fetchPromiseGet(comments);
@@ -70,6 +78,13 @@ export const renderLogin = (comments) => {
         formAddElement.classList.remove("hidden");
         nameInputElement.value = responseData.user.name;
         nameInputElement.disabled = true;
+      })
+      .catch((error) => {
+        if (error.message === "ошибка 400") {
+          alert("Неправильный логин или пароль");
+        } else {
+          alert("Кажется, у вас сломался интернет, попробуйте позже");
+        }
       });
   });
 };

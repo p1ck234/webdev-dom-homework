@@ -29,7 +29,6 @@ export const fetchPromisePost = async (textValue) => {
       if (response.status === 201) {
         return response;
       } else if (response.status === 400) {
-        console.log(response.status);
         throw new Error("ошибка 400");
       } else if (response.status === 500) {
         throw new Error("ошибка 500");
