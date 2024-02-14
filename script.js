@@ -32,6 +32,10 @@ const authBtnElement = document.querySelector("#auth-btn");
 const authLoginElement = document.getElementById("auth-login");
 const authPassElement = document.getElementById("auth-password");
 
+let token;
+const setToken = (newToken) => {
+  token = newToken;
+};
 let comments = [];
 
 linkAuthElement.addEventListener("click", () => {
@@ -86,12 +90,17 @@ regBtnElement.addEventListener("click", () => {
 });
 
 authBtnElement.addEventListener("click", () => {
-  const fetchPromise = fetch("https://wedev-api.sky.pro/api/user", {
+  const fetchPromise = fetch("https://wedev-api.sky.pro/api/user/login", {
     method: "post",
     body: JSON.stringify({
       login: authLoginElement.value,
       password: authPassElement.value,
     }),
+  }).then((response) => {
+    return response.json();
+  }).then((responseData) => {
+    setToken(responseData.user.token);
+    console.log(token);
   });
 });
 
