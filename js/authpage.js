@@ -1,7 +1,8 @@
 import { setToken, fetchPromiseGet } from "./api.js";
+import { renderReg } from "./regpage.js";
 export const renderLogin = (comments) => {
   const appElement = document.getElementById("app");
-  const authHtml = ` <div id="add-form-auth" class="hidden">
+  const authHtml = ` <div id="add-form-auth" class="auth__form">
     <p class="auth__title">Форма входа</p>
     <input
       id="auth-login"
@@ -35,17 +36,18 @@ export const renderLogin = (comments) => {
   const formAddElement = document.querySelector("#add-form");
   const nameInputElement = document.getElementById("input-name");
 
-  linkAuthElement.addEventListener("click", () => {
-    commentsElement.classList.toggle("hidden");
-    linkAuthTextElement.classList.toggle("hidden");
-    formAuthElement.classList.remove("hidden");
-    formAuthElement.classList.add("auth__form");
-  });
+  //   linkAuthElement.addEventListener("click", () => {
+  //     commentsElement.classList.toggle("hidden");
+  //     linkAuthTextElement.classList.toggle("hidden");
+  //     formAuthElement.classList.remove("hidden");
+  //     formAuthElement.classList.add("auth__form");
+  //   });
   regLinkElement.addEventListener("click", () => {
     formAuthElement.classList.add("hidden");
     formAuthElement.classList.remove("auth__form");
-    regFormElement.classList.remove("hidden");
-    regFormElement.classList.add("auth__form");
+    renderReg();
+    // regFormElement.classList.remove("hidden");
+    // regFormElement.classList.add("auth__form");
   });
   authBtnElement.addEventListener("click", () => {
     const fetchPromise = fetch("https://wedev-api.sky.pro/api/user/login", {
