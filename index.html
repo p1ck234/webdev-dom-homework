@@ -30,7 +30,7 @@
       <ul id="list" class="comments">
         <!-- Список комментов рендериться в JS -->
       </ul>
-      <div class="add-form">
+      <div id="add-form" class="hidden">
         <input
           type="text"
           id="input-name"
@@ -48,16 +48,23 @@
           <button id="add-button" class="add-form-button">Написать</button>
         </div>
       </div>
+      <div id="link-auth">
+        <p class="link-text">
+          Чтобы добавить комметарий,
+          <a href="#" class="link-auth auth__link">авторизуйтесь</a>
+        </p>
+      </div>
       <div id="add-form-loading" class="add-form hidden">
         <p>Комментарий добавляется...</p>
       </div>
 
       <button
         id="delete-last-button"
-        class="add-form-button remove-form-button"
+        class="add-form-button remove-form-button hidden"
       >
         Удалить последний комментарий
       </button>
+      <div id="app"></div>
     </div>
     <script type="module" src="script.js"></script>
   </body>

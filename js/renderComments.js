@@ -26,7 +26,7 @@ export const renderComments = (comments) => {
                   <button id="like_button" data-index="${index}" class="like-button"></button>
                 </div>
               </div>
-              <button id="edit_button" data-index="${index}" class="add-form-button edit-button">Редактировать</button>
+              <button id="edit_button" data-index="${index}" class="add-form-button edit-button hidden">Редактировать</button>
               <button id="save_button" data-index="${index}" class="add-form-button save-button">Сохранить</button>
             </li>`;
       } else {
@@ -46,7 +46,7 @@ export const renderComments = (comments) => {
                   <button id="like_button" data-index="${index}" class="like-button -active-like"></button>
                 </div>
               </div>
-              <button id="edit_button" data-index="${index}" class="add-form-button edit-button">Редактировать</button>
+              <button id="edit_button" data-index="${index}" class="add-form-button edit-button hidden">Редактировать</button>
               <button id="save_button" data-index="${index}" class="add-form-button save-button">Сохранить</button>
               </li>`;
       }
