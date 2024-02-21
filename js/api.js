@@ -1,5 +1,5 @@
-import { formatDate } from "./formatDate.js";
 import { renderComments } from "./renderComments.js";
+import { format } from "date-fns";
 
 const sanitizeHtml = (htmlString) => {
   return htmlString
@@ -66,7 +66,7 @@ export const fetchPromiseGet = (comments) => {
       const appComments = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
-          date: formatDate(new Date(comment.date)),
+          date: format(new Date(comment.date), "yyyy-MM-dd hh.mm.ss"),
           comment: comment.text,
           likes: comment.likes,
           isLike: false,
