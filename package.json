@@ -3,9 +3,11 @@
     "date-fns": "^3.3.1"
   },
   "scripts": {
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch",
+    "format": "prettier --write"
   },
   "devDependencies": {
+    "prettier": "^3.2.5",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
   }
