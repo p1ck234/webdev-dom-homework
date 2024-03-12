@@ -3,10 +3,12 @@ import { initSaveButton } from "./saveBtn.js";
 import { initEditButton } from "./editBtn.js";
 import { initReplyButton } from "./replyBtn.js";
 
-
 export const renderComments = (comments) => {
   const listElement = document.getElementById("list");
-
+  // Вызываем функцию format из date-fns, первый параметр — это дата, которую
+  // хотим отформатировать, второй параметр — это строка: к какому формату
+  // желаем привести дату. Обратите внимание MM — это номер месяца,
+  // mm — это минуты
   const commnetsHTML = comments
     .map((comment, index) => {
       if (comment.isLike === false) {
